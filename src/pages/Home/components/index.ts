@@ -1,0 +1,9 @@
+export { default as Banner } from './Banner/index.vue';
+export { default as BookCart } from './BookCart/index.vue';
+export { default as DealsOfWeek } from './DealsOfWeek/index.vue';
+export { default as Trend } from './Trend/index.vue';
+export { default as News } from './News/index.vue';
+export { default as PopularBooks } from './PopularBooks/index.vue';
+export { default as GenresBooks } from './GenresBooks/index.vue';
+export { default as KeepReading } from './KeepReading/index.vue';
+export { default as AboutUs } from './AboutUs/index.vue';
