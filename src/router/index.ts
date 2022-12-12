@@ -9,6 +9,8 @@ const routes : any= [
     { path: '/cart', name: 'CartBuyer', component: () => import('../pages/CartBuyer/index.vue') },
     { path: '/manage-book', name: 'ManageBook', component: () => import('../pages/ManageBook/index.vue') },
     { path: '/book-detail', name: 'BookDetail', component: () => import('../pages/BookDetail/index.vue') },
+    { path: '/login', name: 'Login', component: () => import('../components/auth/Login.vue') },
+    { path: '/signin', name: 'SignIn', component: () => import('../components/auth/Register.vue') },
     { path: '/:catchAll(.*)', name: 'PageNotFound', component: () => import('../pages/PageNotFound/index.vue') },
   ]
 

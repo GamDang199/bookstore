@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import { reactive, ref } from '@vue/reactivity';
+import axios from 'axios';
 import { size } from 'lodash';
-
+import { useRouter } from 'vue-router';
+import {userService} from '../../service';
+import {successNotify, errorNotify} from '../../shared';
 export interface IUser {
   username: string;
   password: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
+  imageUrl: string;
+  role: string;
   address: string;
 }
 
+const routers = useRouter();
 const isShowIcon = ref(true);
 const typePassword = ref('password');
 
@@ -17,7 +23,9 @@ const infoRegister = reactive<IUser>({
   username: '',
   password: '',
   email: '',
-  phoneNumber: '',
+  phone: '',
+  imageUrl: '',
+  role: 'ADMIN',
   address: '',
 });
 
@@ -76,7 +84,7 @@ const handleValidateEmail = () => {
 };
 
 const handleValidatePhoneNumber = () => {
-  if (infoRegister.phoneNumber === null || infoRegister.phoneNumber === '') {
+  if (infoRegister.phone === null || infoRegister.phone === '') {
     erRegister.erPhoneNumber = 'Không được để trống trường này';
     erRegister.erRegexPhone = '';
     return;
@@ -84,7 +92,7 @@ const handleValidatePhoneNumber = () => {
 
   const regexPhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
-  if (!regexPhone.test(infoRegister.phoneNumber)) {
+  if (!regexPhone.test(infoRegister.phone)) {
     erRegister.erPhoneNumber = '';
     erRegister.erRegexPhone = 'Số điện thoại không đúng định dạng';
     return;
@@ -101,11 +109,25 @@ const handleValidateAddress = () => {
     erRegister.erAddress = '';
   }
 };
+
+const submit = async() => {
+  try {
+    const res = await userService.signup(infoRegister);
+    if(res.status === 200) {
+      successNotify("Tạo tài khoản thành công");
+      routers.push({ name: 'Login'});
+    }
+  } catch (error) {
+    errorNotify("Create account failed!");
+  }
+  
+  
+}
 </script>
 
 <template>
-  <div class="flex justify-center items-center w-[100vw] h-[100vh]">
-    <form class="w-[900px] bg-slate-400 rounded-[3px]">
+  <div class="flex justify-center items-center h-[100vh]">
+    <form class="w-[900px] bg-[#9e9c9b] rounded-[3px]" @submit.prevent>
       <h1 class="text-center">Đăng ký</h1>
       <div class="flex justify-between mt-9 shrink-0">
         <label for="username" class="mr-5 text-[24px] font-normal w-[300px]">Username</label>
@@ -172,19 +194,19 @@ const handleValidateAddress = () => {
         <input
           id="phone"
           type="text"
-          v-model="infoRegister.phoneNumber"
+          v-model="infoRegister.phone"
           @blur="handleValidatePhoneNumber()"
           class="w-full outline-none border-none px-4 py-[14px] rounded-[2px]"
         />
       </div>
       <div
-        v-if="size(erRegister.erPhoneNumber) && !infoRegister.phoneNumber"
+        v-if="size(erRegister.erPhoneNumber) && !infoRegister.phone"
         class="text-red-600 text-lg mt-2 mb-7 pl-[240px]"
       >
         {{ erRegister.erPhoneNumber }}
       </div>
       <div
-        v-else-if="size(erRegister.erRegexPhone) || !infoRegister.phoneNumber"
+        v-else-if="size(erRegister.erRegexPhone) || !infoRegister.phone"
         class="text-red-600 text-lg mt-2 mb-7 pl-[240px]"
       >
         {{ erRegister.erRegexPhone }}
@@ -208,7 +230,7 @@ const handleValidateAddress = () => {
       </div>
 
       <div class="flex justify-center items-center my-9">
-        <button class="px-5 py-3 rounded-md bg-blue-800 text-white border-none text-2xl font-semibold">
+        <button class="px-5 py-3 rounded-md bg-blue-800 text-white border-none text-2xl font-semibold" @click="submit">
           Đăng ký
         </button>
       </div>

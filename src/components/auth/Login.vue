@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { size } from 'lodash';
+import { userService} from '../../service';
+import {successNotify, errorNotify} from '../../shared';
+import { useRouter } from 'vue-router';
 
 export interface IUser {
   username: string;
   password: string;
 }
+
+const routers = useRouter();
 const isShowIcon = ref(true);
 const typePassword = ref('password');
 const infoLogin = reactive<IUser>({
@@ -43,14 +48,23 @@ const handleValidatePassword = () => {
   }
 };
 
-const login = (e: any) => {
-  console.log(infoLogin);
+const login = async (e: any) => {
+  try {
+    const res = await userService.login(infoLogin);
+    if(res.status === 200) {
+      console.log(res.data);
+      successNotify('Login successfully!');
+      routers.push({name: 'Home'});
+    }
+  } catch (error) {
+    errorNotify("Login failed");
+  }
 };
 </script>
 
 <template>
   <div class="flex justify-center items-center w-[100vw] h-[100vh]">
-    <form class="w-[750px] h-[400px] bg-slate-400 rounded-[3px]" @submit.prevent="login()">
+    <form class="w-[750px] h-[400px] bg-slate-400 rounded-[3px]" @submit.prevent>
       <h1 class="text-center">Đăng nhập</h1>
       <div class="flex justify-between mt-5 shrink-0">
         <label for="username" class="mr-5 text-[24px] font-normal w-[100px]">Username</label>
@@ -92,7 +106,7 @@ const login = (e: any) => {
       <div class="flex justify-center items-center mt-9">
         <button
           class="px-5 py-3 rounded-md bg-blue-800 text-white border-none text-2xl font-semibold"
-          @click="login()"
+          @click="login"
         >
           Đăng nhập
         </button>

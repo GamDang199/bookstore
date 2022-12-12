@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { Logo } from '../icons';
+import {Button} from 'ant-design-vue';
 
 const router = useRouter();
 const handleShowCart = () => {
   router.push({ name: 'CartBuyer' });
 };
+
+const showFormSignIn = () => {
+  router.push({ name: 'SignIn' });
+}
+
+const showFormLogin = () => {
+  router.push({ name: 'Login' });
+}
 </script>
 
 <template>
@@ -37,11 +46,13 @@ const handleShowCart = () => {
           placeholder="Search..."
         />
 
-        <div class="text-2xl flex gap-x-14 pt-3 text-[#cc570e]">
+        <div class="text-2xl flex gap-x-10 pt-3 text-[#cc570e]">
           <span @click="handleShowCart" class="cursor-pointer hover:text-[#993f15]"
             ><i class="fa-solid fa-cart-shopping"></i
           ></span>
-          <span class="cursor-pointer hover:text-[#993f15]"><i class="fa-solid fa-user"></i></span>
+          <!-- <span class="cursor-pointer hover:text-[#993f15]"><i class="fa-solid fa-user"></i></span> -->
+          <Button class="!bg-[#cc570e] !text-white !rounded hover:!bg-[#fff] hover:!text-black" @click="showFormSignIn">Đăng ký</Button>
+          <Button class="!bg-[#ba623a] !text-white !rounded hover:!bg-[#fff] hover:!text-black" @click="showFormLogin">Đăng nhập</Button>
         </div>
       </div>
     </div>
